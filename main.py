@@ -1,11 +1,12 @@
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
+from json import loads
+from statistics import mean
 from time import sleep
-import json
+from urllib.error import HTTPError, URLError
+from urllib.request import urlopen, Request
 
 def main():
     while True:
-        print("Look for an item (ex: 'trinity prime set', 'volt prime chassis') without quotes")
+        print("Look for individual item or a set (ex: 'trinity prime set', 'volt prime chassis') without quotes")
         search = input("> ").strip().lower()
 
         try:
@@ -13,25 +14,28 @@ def main():
                 url=f"https://api.warframe.market/v1/items/{search.replace(' ', '_')}/statistics", 
                 headers={'language': 'en', 'platform': 'pc'}
                 )
-            response = json.loads(urlopen(req).read())['payload']['statistics_closed']['48hours']
+            response = loads(urlopen(req).read())['payload']['statistics_closed']['48hours']
         except HTTPError:
             print("ERROR: Invalid item, check if the item name is correct\n")
-            sleep(1)
+            sleep(0.75)
+            continue
+        except URLError:
+            print("ERROR: Please make sure you are connected to the internet\n")
+            sleep(0.75)
             continue
 
         last_twelve_hours = {
             'volume': 0,
             'min_price': [],
             'max_price': [],
-            'avg_price': 0,
+            'avg_price': [],
         }
         
         for data in response[-13:-1]:
             last_twelve_hours['volume'] += data['volume']
             last_twelve_hours['min_price'].append(data['min_price'])
             last_twelve_hours['max_price'].append(data['max_price'])
-            last_twelve_hours['avg_price'] += data['avg_price']
-
+            last_twelve_hours['avg_price'].append(data['avg_price'])
 
         print(f"""
         | {search.upper()} |
@@ -46,7 +50,7 @@ def main():
         Volume: {last_twelve_hours['volume']}
         Min price: {min(last_twelve_hours['min_price'])}
         Max price: {max(last_twelve_hours['max_price'])}
-        Average price: {last_twelve_hours['avg_price'] / 12}
+        Average price: {mean(last_twelve_hours['avg_price'])}
         """)
 
 if __name__ == '__main__':
