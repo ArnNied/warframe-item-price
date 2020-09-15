@@ -10,26 +10,25 @@ A simple Python (3.x) script with no dependencies needed that uses warframe.mark
 
 ## EXAMPLE
 ```
-python main.py
-
-Look for an item (ex: 'trinity prime set', 'volt prime chassis') without quotes
+$ py main.py
+Look for individual item or a set (ex: 'trinity prime set', 'volt prime chassis') without quotes
 > vauban prime chassis
 
         | VAUBAN PRIME CHASSIS |
         SOLD/BOUGHT
         Last Hour:
-        Volume: 2
-        Min price: 11.0
-        Max price: 14.0
-        Average price: 12.5
+        Volume: 3
+        Min price: 15.0
+        Max price: 15.0
+        Average price: 15.0
 
         Last 12 hours:
-        Volume: 45
+        Volume: 44
         Min price: 9.0
         Max price: 15.0
-        Average price: 12.833333333333334
+        Average price: 12.583333333333334
 
-Look for an item (ex: 'trinity prime set', 'volt prime chassis') without quotes
+Look for individual item or a set (ex: 'trinity prime set', 'volt prime chassis') without quotes
 >
 ```
 
